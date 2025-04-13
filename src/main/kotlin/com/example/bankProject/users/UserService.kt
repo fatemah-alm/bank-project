@@ -9,6 +9,7 @@ class UserService(
 
     fun listUsers(): List<User> = userRepository.findAll().map {
         User(
+            id=it.id,
             username = it.username,
             password=it.password
 
@@ -24,6 +25,7 @@ class UserService(
 }
 
 data class User(
+    val id: Long?,
 
     val username: String,
     val password: String,
