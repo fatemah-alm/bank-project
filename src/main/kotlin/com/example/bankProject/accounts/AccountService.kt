@@ -4,6 +4,7 @@ import com.example.bankProject.users.UserEntity
 import com.example.bankProject.users.UsersRepository
 import jakarta.inject.Named
 import java.math.BigDecimal
+import java.util.UUID
 
 @Named
 class AccountsService(
@@ -15,22 +16,24 @@ class AccountsService(
         Account(
             user = it.user,
             accountNumber = it.accountNumber,
+            isActive = it.isActive,
             name = it.name,
-            initialBalance = it.initialBalance
+            balance = it.balance
         )
     }
 
 
-    fun createAccount(userId: Long, name: String, initialBalance: BigDecimal){
+    fun createAccount(userId: Long, name: String, balance: BigDecimal){
         val user = usersRepository.findById(userId).get()
-        val newAccount = AccountEntity(user=user, name = name, initialBalance = initialBalance, accountNumber = (1..10).random().toString())
+        val newAccount = AccountEntity(user=user, name = name, isActive = true, balance = balance, accountNumber = UUID.randomUUID().toString())
         accountRepository.save(newAccount)
     }
 
 
     fun closeAccount(accountNumber:String){
         val foundAccount = accountRepository.findByAccountNumber(accountNumber)?: throw IllegalArgumentException("Account not found")
-        accountRepository.delete(foundAccount)
+        foundAccount.isActive=false
+        accountRepository.save(foundAccount)
 
     }
 }
@@ -38,8 +41,9 @@ class AccountsService(
 
 data class Account(
     val user: UserEntity,
+    val isActive: Boolean,
     val accountNumber: String,
     val name: String,
-    val initialBalance: BigDecimal
+    val balance: BigDecimal
 
     )

@@ -14,7 +14,7 @@ class AccountController(
     fun getAccounts(): List<Account> = accountsService.listAccounts()
 
     @PostMapping("/accounts/v1/accounts")
-    fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.initialBalance)
+    fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.balance)
 
     @PostMapping("/accounts/v1/accounts/{accountNumber}/close")
     fun closeAccount (@PathVariable accountNumber: String) = accountsService.closeAccount(accountNumber)
@@ -25,7 +25,7 @@ class AccountController(
 data class CreateAccountRequest(
     val userId: Long,
     val name: String,
-    val initialBalance: BigDecimal
+    val balance: BigDecimal
 
 
 )

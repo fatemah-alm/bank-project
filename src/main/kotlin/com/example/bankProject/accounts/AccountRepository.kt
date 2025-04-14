@@ -23,13 +23,12 @@ data class AccountEntity(
     val user: UserEntity,
 
     val accountNumber: String,
-
     val name: String,
-
-    var initialBalance: BigDecimal
+    var isActive: Boolean,
+    var balance: BigDecimal
 
 
 
 ){
-    constructor() : this(null, UserEntity(),"","",BigDecimal(0.01))
+    constructor() : this(null, UserEntity(),"","",true,BigDecimal(0.01))
 }

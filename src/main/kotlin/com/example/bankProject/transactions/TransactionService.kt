@@ -24,9 +24,9 @@ class TransactionService(
         val srcAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
         val destAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
         val newTransaction = TransferEntity(sourceAccountNumber = srcAccount,  destinationAccountNumber= destAccount, amount=amount)
-        srcAccount.initialBalance -= amount
+        srcAccount.balance -= amount
         accountRepository.save(srcAccount)
-        destAccount.initialBalance += amount
+        destAccount.balance += amount
         accountRepository.save(destAccount)
 // add validation if funds are not sufficient
         transactionRepository.save(newTransaction)
