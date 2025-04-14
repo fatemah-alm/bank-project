@@ -25,12 +25,10 @@ data class TransferEntity(
 
     val amount: BigDecimal
 
-//    @OneToMany(mappedBy = "order_id")
-//    val items: List<ItemEntity>? = null
-
 
 ){
-    constructor() : this(null,AccountEntity(), AccountEntity(),BigDecimal(0.01))
-
+    constructor() : this(null,
+        AccountEntity(),
+         AccountEntity(), BigDecimal(0.01))
 
 }

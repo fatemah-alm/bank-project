@@ -17,14 +17,14 @@ class AccountController(
     fun getAccounts(): List<Account> = accountsService.listAccounts()
 
     @PostMapping("/accounts/v1/accounts")
-    fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.initial_balance)
+    fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.initialBalance)
 
 }
 
 data class CreateAccountRequest(
     val userId: Long,
     val name: String,
-    val initial_balance: BigDecimal
+    val initialBalance: BigDecimal
 
 
 )

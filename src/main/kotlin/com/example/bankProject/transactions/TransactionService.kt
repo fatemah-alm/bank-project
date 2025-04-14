@@ -2,10 +2,6 @@ package com.example.bankProject.transactions
 
 import com.example.bankProject.accounts.AccountEntity
 import com.example.bankProject.accounts.AccountRepository
-
-
-import com.example.bankProject.users.UserEntity
-import com.example.bankProject.users.UsersRepository
 import jakarta.inject.Named
 import java.math.BigDecimal
 
@@ -27,8 +23,13 @@ class TransactionService(
     fun createTransaction(sourceAccountNumber: String, destinationAccountNumber:String, amount: BigDecimal){
         val srcAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
         val destAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
-        val newTransaction = TransferEntity(sourceAccountNumber = srcAccount, destinationAccountNumber= destAccount, amount=amount)
-          transactionRepository.save(newTransaction)
+        val newTransaction = TransferEntity(sourceAccountNumber = srcAccount,  destinationAccountNumber= destAccount, amount=amount)
+        srcAccount.initialBalance -= amount
+        accountRepository.save(srcAccount)
+        destAccount.initialBalance += amount
+        accountRepository.save(destAccount)
+// add validation if funds are not sufficient
+        transactionRepository.save(newTransaction)
     }
 }
 

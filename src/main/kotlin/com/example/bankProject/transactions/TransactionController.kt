@@ -17,18 +17,15 @@ class TransactionController(
     ){
 
 
-    @GetMapping("/accounts/v1/accounts")
-    fun getAccounts(): List<Account> = accountsService.listAccounts()
-
-    @PostMapping("/accounts/v1/accounts")
-    fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.initial_balance)
+    @PostMapping("/accounts/v1/accounts/transfer")
+    fun transferFunds(@RequestBody request: CreateTransactionRequest) = transactionService.createTransaction(request.sourceAccountNumber, request.destinationAccountNumber,request.amount)
 
 }
 
-data class CreateAccountRequest(
-    val userId: Long,
-    val name: String,
-    val initial_balance: BigDecimal
+data class CreateTransactionRequest(
+    val sourceAccountNumber: String,
+    val destinationAccountNumber: String,
+    val amount: BigDecimal
 
 
 )

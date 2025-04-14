@@ -22,14 +22,12 @@ data class AccountEntity(
     @ManyToOne
     val user: UserEntity,
 
-    val account_number: String,
+    val accountNumber: String,
 
     val name: String,
 
-    val initial_balance: BigDecimal
+    var initialBalance: BigDecimal
 
-//    @OneToMany(mappedBy = "order_id")
-//    val items: List<ItemEntity>? = null
 
 
 ){

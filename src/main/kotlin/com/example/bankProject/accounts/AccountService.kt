@@ -14,17 +14,17 @@ class AccountsService(
     fun listAccounts(): List<Account> = accountRepository.findAll().map {
         Account(
             user = it.user,
-            account_number = it.account_number,
+            accountNumber = it.accountNumber,
             name = it.name,
-            initial_balance = it.initial_balance
+            initialBalance = it.initialBalance
         )
     }
 
 
-    fun createAccount(userId: Long, name: String, initial_balance: BigDecimal){
+    fun createAccount(userId: Long, name: String, initialBalance: BigDecimal){
         val user = usersRepository.findById(userId).get()
         println(user)
-        val newAccount = AccountEntity(user=user, name = name, initial_balance = initial_balance, account_number = (1..10).random().toString())
+        val newAccount = AccountEntity(user=user, name = name, initialBalance = initialBalance, accountNumber = (1..10).random().toString())
         accountRepository.save(newAccount)
     }
 }
@@ -32,8 +32,8 @@ class AccountsService(
 
 data class Account(
     val user: UserEntity,
-    val account_number: String,
+    val accountNumber: String,
     val name: String,
-    val initial_balance: BigDecimal
+    val initialBalance: BigDecimal
 
     )
