@@ -3,6 +3,7 @@ package com.example.bankProject.accounts
 import com.example.bankProject.users.UserEntity
 import com.example.bankProject.users.UsersRepository
 import jakarta.inject.Named
+import java.math.BigDecimal
 
 @Named
 class AccountsService(
@@ -20,7 +21,7 @@ class AccountsService(
     }
 
 
-    fun createAccount(userId: Long, name: String, initial_balance: Int){
+    fun createAccount(userId: Long, name: String, initial_balance: BigDecimal){
         val user = usersRepository.findById(userId).get()
         println(user)
         val newAccount = AccountEntity(user=user, name = name, initial_balance = initial_balance, account_number = (1..10).random().toString())
@@ -33,6 +34,6 @@ data class Account(
     val user: UserEntity,
     val account_number: String,
     val name: String,
-    val initial_balance: Int
+    val initial_balance: BigDecimal
 
     )

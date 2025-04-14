@@ -4,9 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigDecimal
 
 @RestController
-class OnlineOrderController(
+class AccountController(
     private val accountsService: AccountsService,
 
     ){
@@ -23,7 +24,7 @@ class OnlineOrderController(
 data class CreateAccountRequest(
     val userId: Long,
     val name: String,
-    val initial_balance: Int
+    val initial_balance: BigDecimal
 
 
 )
