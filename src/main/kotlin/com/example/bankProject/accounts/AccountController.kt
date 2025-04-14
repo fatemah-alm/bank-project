@@ -1,9 +1,6 @@
 package com.example.bankProject.accounts
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
 
 @RestController
@@ -18,6 +15,10 @@ class AccountController(
 
     @PostMapping("/accounts/v1/accounts")
     fun createAccount(@RequestBody request: CreateAccountRequest) = accountsService.createAccount(request.userId, request.name,request.initialBalance)
+
+    @PostMapping("/accounts/v1/accounts/{accountNumber}/close")
+    fun closeAccount (@PathVariable accountNumber: String) = accountsService.closeAccount(accountNumber)
+
 
 }
 

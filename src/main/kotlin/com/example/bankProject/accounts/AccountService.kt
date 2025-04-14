@@ -23,9 +23,15 @@ class AccountsService(
 
     fun createAccount(userId: Long, name: String, initialBalance: BigDecimal){
         val user = usersRepository.findById(userId).get()
-        println(user)
         val newAccount = AccountEntity(user=user, name = name, initialBalance = initialBalance, accountNumber = (1..10).random().toString())
         accountRepository.save(newAccount)
+    }
+
+
+    fun closeAccount(accountNumber:String){
+        val foundAccount = accountRepository.findByAccountNumber(accountNumber)?: throw IllegalArgumentException("Account not found")
+        accountRepository.delete(foundAccount)
+
     }
 }
 
