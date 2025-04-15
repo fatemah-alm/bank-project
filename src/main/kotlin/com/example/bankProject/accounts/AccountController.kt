@@ -1,5 +1,6 @@
 package com.example.bankProject.accounts
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
 
@@ -14,8 +15,16 @@ class AccountController(
     fun getAccounts(): List<Account> =  accountsService.listAccounts()
 
     @PostMapping("/accounts/v1/accounts")
-    fun createAccount(@RequestBody request: CreateAccountRequest) : Account =
-        accountsService.createAccount(request.userId, request.name,request.balance)
+    fun createAccount(@RequestBody request: CreateAccountRequest) : ResponseEntity<*> {
+        return try {
+            accountsService.createAccount(request.userId, request.name,request.balance)
+            ResponseEntity.ok("Account created successfully")
+        }
+        catch (e: MaxAccountsReachedException){
+            ResponseEntity.badRequest().body(e.message)
+        }
+
+    }
 
     @PostMapping("/accounts/v1/accounts/{accountNumber}/close")
     fun closeAccount (@PathVariable accountNumber: String) = accountsService.closeAccount(accountNumber)

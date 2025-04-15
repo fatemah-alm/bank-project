@@ -9,6 +9,7 @@ import java.math.BigDecimal
 @Named
 interface AccountRepository : JpaRepository<AccountEntity, Long>{
     fun findByAccountNumber(accountNumber: String): AccountEntity
+    fun findByUserId(userId:Long):List<AccountEntity>
 }
 
 

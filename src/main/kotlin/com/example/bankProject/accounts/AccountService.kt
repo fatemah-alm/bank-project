@@ -6,6 +6,7 @@ import jakarta.inject.Named
 import java.math.BigDecimal
 import java.util.UUID
 
+const val MAX_ACCOUNT_LIMIT = 5
 @Named
 class AccountsService(
     private val accountRepository: AccountRepository,
@@ -25,6 +26,13 @@ class AccountsService(
 
     fun createAccount(userId: Long, name: String, balance: BigDecimal) : Account{
         val user = usersRepository.findById(userId).get()
+        val accounts = accountRepository.findByUserId(userId)
+
+        if (accounts.size >= MAX_ACCOUNT_LIMIT)
+        {
+
+            throw MaxAccountsReachedException()
+        }
         val newAccount = AccountEntity(user=user, name = name, isActive = true, balance = balance, accountNumber = UUID.randomUUID().toString())
         return accountRepository.save(newAccount).let {
             Account(
@@ -54,3 +62,5 @@ data class Account(
     val name: String,
     val balance: BigDecimal
 )
+
+class MaxAccountsReachedException(message: String = "You have reached your maximum accounts") : RuntimeException(message)
