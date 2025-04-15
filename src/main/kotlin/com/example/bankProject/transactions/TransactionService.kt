@@ -25,6 +25,9 @@ class TransactionService(
         val destAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
         val newTransaction = TransferEntity(sourceAccountNumber = srcAccount,  destinationAccountNumber= destAccount, amount=amount)
 
+        if(srcAccount.balance < amount){
+            throw InsufficientFundsException()
+        }
             srcAccount.balance -= amount
             accountRepository.save(srcAccount)
             destAccount.balance += amount
@@ -41,3 +44,5 @@ data class Transaction(
     val destinationAccountNumber: AccountEntity,
     val amount: BigDecimal,
 )
+
+class InsufficientFundsException(message: String = "Insufficient Funds!") : RuntimeException(message)
