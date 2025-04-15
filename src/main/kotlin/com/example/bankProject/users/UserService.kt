@@ -1,6 +1,9 @@
 package com.example.bankProject.users
 
+import com.example.bankProject.accounts.Account
 import jakarta.inject.Named
+import java.math.BigDecimal
+
 
 @Named
 class UserService(
@@ -17,8 +20,10 @@ class UserService(
     }
 
     fun createUser(username: String,password:String){
-
+        if (password.length < 6) throw InvalidPasswordException()
+        if (username == "admin") throw InvalidUsernameException("Username 'admin' is reserved")
         val newUser = UserEntity( username=username, password=password)
+
         userRepository.save(newUser)
     }
 
@@ -30,3 +35,8 @@ data class User(
     val username: String,
     val password: String,
 )
+
+
+
+class InvalidPasswordException(message: String = "Password must be at least 6 characters") : RuntimeException(message)
+class InvalidUsernameException(message: String = "Username is not allowed") : RuntimeException(message)
