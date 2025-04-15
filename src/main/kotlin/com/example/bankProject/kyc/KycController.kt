@@ -1,6 +1,7 @@
 package com.example.bankProject.kyc
 
 import com.example.bankProject.transactions.TransactionService
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -12,6 +13,9 @@ class KycController(
     private val kycService: KycService,
 
     ){
+
+    @PostMapping("/users/v1/kyc/{userId}")
+    fun getKyc (@PathVariable userId: Long) = kycService.getKyc(userId)
 
 
     @PostMapping("/users/v1/kyc")

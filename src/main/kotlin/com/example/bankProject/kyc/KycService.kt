@@ -22,6 +22,10 @@ class KycService(
         )
     }
 
+    fun getKyc(userId:Long) : Kyc {
+        val kyc = kycRepository.findByUserId(userId)
+        return kyc
+    }
 
     fun createKyc(userId: Long, firstName: String, lastName: String,dataOfBirth:Date,salary: BigDecimal){
         val user = usersRepository.findById(userId).get()
