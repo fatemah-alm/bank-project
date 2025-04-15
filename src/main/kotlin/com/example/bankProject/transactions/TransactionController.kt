@@ -23,5 +23,4 @@ data class CreateTransactionRequest(
     val destinationAccountNumber: String,
     val amount: BigDecimal
 
-
 )
