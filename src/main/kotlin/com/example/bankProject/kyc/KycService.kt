@@ -14,7 +14,7 @@ class KycService(
 
     fun listKyc(): List<Kyc> = kycRepository.findAll().map {
         Kyc(
-            user = it.user,
+            userId = it.user.id?: throw Exception(" Account was expecting user id not to be null..."),
             firstName = it.firstName,
             lastName = it.lastName,
             dataOfBirth = it.dataOfBirth,
@@ -39,7 +39,7 @@ class KycService(
 
 
 data class Kyc(
-    val user: UserEntity,
+    val userId: Long,
     val firstName: String,
     val lastName: String,
     var dataOfBirth: Date,

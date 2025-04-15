@@ -14,7 +14,7 @@ class AccountsService(
 
     fun listAccounts(): List<Account> = accountRepository.findAll().map {
         Account(
-            user = it.user,
+            user = it.user.id?: throw Exception(" Account was expecting user id not to be null..."),
             accountNumber = it.accountNumber,
             isActive = it.isActive,
             name = it.name,
@@ -23,10 +23,18 @@ class AccountsService(
     }
 
 
-    fun createAccount(userId: Long, name: String, balance: BigDecimal){
+    fun createAccount(userId: Long, name: String, balance: BigDecimal) : Account{
         val user = usersRepository.findById(userId).get()
         val newAccount = AccountEntity(user=user, name = name, isActive = true, balance = balance, accountNumber = UUID.randomUUID().toString())
-        accountRepository.save(newAccount)
+        return accountRepository.save(newAccount).let {
+            Account(
+                user = it.user.id ?: throw Exception(" Account was expecting user id not to be null..."),
+                isActive = it.isActive,
+                accountNumber = it.accountNumber,
+                name = it.name,
+                balance = it.balance
+            )
+        }
     }
 
 
@@ -40,10 +48,9 @@ class AccountsService(
 
 
 data class Account(
-    val user: UserEntity,
+    val user: Long,
     val isActive: Boolean,
     val accountNumber: String,
     val name: String,
     val balance: BigDecimal
-
-    )
+)

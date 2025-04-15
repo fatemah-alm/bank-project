@@ -1,6 +1,5 @@
 package com.example.bankProject.kyc
 
-import com.example.bankProject.accounts.AccountEntity
 import com.example.bankProject.users.UserEntity
 import jakarta.inject.Named
 import jakarta.persistence.*
