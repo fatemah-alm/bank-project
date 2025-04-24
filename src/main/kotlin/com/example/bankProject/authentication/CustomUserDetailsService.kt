@@ -1,0 +1,20 @@
+package com.example.bankProject.authentication
+
+
+import com.example.bankProject.users.UsersRepository
+import org.springframework.security.core.userdetails.*
+import org.springframework.stereotype.Service
+
+@Service
+class CustomUserDetailsService(
+    private val usersRepository: UsersRepository
+) : UserDetailsService {
+    override fun loadUserByUsername(username: String): UserDetails {
+        val user = usersRepository.findByUsername(username)
+            ?: throw UsernameNotFoundException("User not found")
+
+        return User.builder()
+            .username(user.username)
+            .password(user.password).build()
+    }
+}

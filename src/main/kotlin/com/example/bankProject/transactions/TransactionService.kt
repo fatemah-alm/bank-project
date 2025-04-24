@@ -32,7 +32,11 @@ class TransactionService(
             accountRepository.save(srcAccount)
             destAccount.balance += amount
             accountRepository.save(destAccount)
-            transactionRepository.save(newTransaction)
+            transactionRepository.save(newTransaction).let {
+                Transformed(
+                    newBalance = destAccount.balance
+                )
+            }
 
     }
 
@@ -45,4 +49,8 @@ data class Transaction(
     val amount: BigDecimal,
 )
 
+
+data class Transformed(
+    val newBalance: BigDecimal
+)
 class InsufficientFundsException(message: String = "Insufficient Funds!") : RuntimeException(message)

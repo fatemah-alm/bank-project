@@ -5,7 +5,9 @@ import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
 
 @Named
-interface UsersRepository : JpaRepository<UserEntity, Long>
+interface UsersRepository : JpaRepository<UserEntity, Long>{
+    fun findByUsername(username: String):UserEntity?
+}
 
 @Entity
 @Table(name = "users")

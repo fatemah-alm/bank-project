@@ -1,12 +1,13 @@
 package com.example.bankProject.users
 
 import jakarta.inject.Named
-
+import org.springframework.security.crypto.password.PasswordEncoder
 
 
 @Named
 class UserService(
-    private val userRepository: UsersRepository
+    private val userRepository: UsersRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun listUsers(): List<User> = userRepository.findAll().map {
@@ -21,7 +22,7 @@ class UserService(
     fun createUser(username: String,password:String){
         if (password.length < 6) throw InvalidPasswordException()
         if (username == "admin") throw InvalidUsernameException("Username 'admin' is reserved")
-        val newUser = UserEntity( username=username, password=password)
+        val newUser = UserEntity( username=username, password=passwordEncoder.encode(password))
 
         userRepository.save(newUser)
     }

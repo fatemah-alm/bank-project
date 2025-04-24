@@ -1,9 +1,6 @@
 package com.example.bankProject.kyc
 
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -13,7 +10,7 @@ class KycController(
 
     ){
 
-    @PostMapping("/users/v1/kyc/{userId}")
+    @GetMapping("/users/v1/kyc/{userId}")
     fun getKyc (@PathVariable userId: Long) = kycService.getKyc(userId)
 
 
