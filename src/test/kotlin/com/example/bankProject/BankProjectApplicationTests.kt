@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class BankProjectApplicationTests {
 
 	companion object {
@@ -36,7 +37,8 @@ class BankProjectApplicationTests {
 				password = passwordEncoder.encode("joincoded")
 			)
 			usersRepository.save(testUser)
-			testUserId = testUser.id!!
+			val user = usersRepository.findByUsername(testUser.username)
+			testUserId = user!!.id
 		}
 	}
 
@@ -53,33 +55,31 @@ class BankProjectApplicationTests {
 		val headers = HttpHeaders(
 			MultiValueMap.fromSingleValue(mapOf("Authorization" to "Bearer $token"))
 		)
+		var maximumNumber = 5
 
-		val requestEntity = HttpEntity<String>(headers)
-		val accountsToCreate = listOf(
-			CreateAccountRequest(testUserId!!, "Checking", BigDecimal(500)),
-			CreateAccountRequest(testUserId!!, "Savings", BigDecimal(1500)),
-			CreateAccountRequest(testUserId!!, "Investments", BigDecimal(10000)),
-			CreateAccountRequest(testUserId!!, "Salary", BigDecimal(1800)),
-			CreateAccountRequest(testUserId!!, "Donations", BigDecimal(400))
-		)
-		for (req in accountsToCreate) {
-			val result = restTemplate.exchange(
+		val finalRequest = CreateAccountRequest(testUserId!!, "New Account", BigDecimal(1800))
+		val requestEntity = HttpEntity(finalRequest, headers)
+
+	// list of requests
+		while(maximumNumber!=0){
+			val response = restTemplate.exchange(
 				"/accounts/v1/accounts",
 				HttpMethod.POST,
 				requestEntity,
 				String::class.java
 			)
-			assertEquals(HttpStatus.OK, result.statusCode)
-			assertEquals("Account created successfully", result.body)
+			assertEquals(HttpStatus.OK, response.statusCode)
+			assertEquals("Account created successfully", response.body)
+			maximumNumber-=1
 		}
-		val finalRequest = CreateAccountRequest(testUserId!!, "Extra", BigDecimal(500))
-		val finalEntity = HttpEntity(finalRequest, headers)
+// the extra request
 		val result = restTemplate.exchange(
 			"/accounts/v1/accounts",
 			HttpMethod.POST,
-			finalEntity,
+			requestEntity,
 			String::class.java
 		)
+		assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
 		assertEquals("You have reached your maximum accounts", result.body)
 
 
